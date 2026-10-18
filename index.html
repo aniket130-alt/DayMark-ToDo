@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="A simple, focused to-do list that keeps your tasks in sync with Firebase."
+      content="A focused to-do list that helps you plan your day and sync tasks with Firebase."
     />
     <meta name="theme-color" content="#f5f6f8" />
     <title>Daymark — A calmer to-do list</title>
@@ -15,6 +15,9 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
+    <script>
+      document.documentElement.dataset.theme = localStorage.getItem("daymark-theme") || "light";
+    </script>
     <link rel="stylesheet" href="./styles.css" />
     <script type="module" src="./app.js"></script>
   </head>
@@ -30,9 +33,19 @@
           </span>
           <span>daymark</span>
         </a>
-        <div class="sync-status" id="sync-status" role="status" aria-live="polite">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span id="sync-status-text">Connecting to Firebase…</span>
+        <div class="topbar-actions">
+          <div class="sync-status" id="sync-status" role="status" aria-live="polite">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span id="sync-status-text">Connecting to Firebase…</span>
+          </div>
+          <button class="utility-button theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode">
+            <span id="theme-icon" aria-hidden="true">☾</span>
+            <span class="theme-label">Dark mode</span>
+          </button>
+          <button class="utility-button google-button" id="google-button" type="button" disabled>
+            <span aria-hidden="true">G</span>
+            <span id="google-button-label">Continue with Google</span>
+          </button>
         </div>
       </header>
 
@@ -44,22 +57,63 @@
 
       <section class="task-panel" aria-label="Your tasks">
         <form class="task-form" id="task-form">
-          <label class="sr-only" for="task-input">Add a task</label>
-          <span class="input-plus" aria-hidden="true">+</span>
-          <input
-            id="task-input"
-            name="task"
-            type="text"
-            placeholder="Add a task to your list…"
-            maxlength="180"
-            autocomplete="off"
-            required
-          />
-          <button class="add-button" type="submit">
-            <span>Add task</span>
-            <span aria-hidden="true">↵</span>
-          </button>
+          <div class="task-input-row">
+            <label class="sr-only" for="task-input">Add a task</label>
+            <span class="input-plus" aria-hidden="true">+</span>
+            <input
+              id="task-input"
+              name="task"
+              type="text"
+              placeholder="Add a task to your list…"
+              maxlength="180"
+              autocomplete="off"
+              required
+            />
+            <button class="add-button" type="submit">
+              <span>Add task</span>
+              <span aria-hidden="true">↵</span>
+            </button>
+          </div>
+          <div class="task-options">
+            <label class="option-field">
+              <span>Priority</span>
+              <select id="priority-input" aria-label="Task priority">
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+                <option value="low">Low</option>
+              </select>
+            </label>
+            <label class="option-field">
+              <span>Category</span>
+              <select id="category-input" aria-label="Task category">
+                <option value="Personal">Personal</option>
+                <option value="Work">Work</option>
+                <option value="Study">Study</option>
+              </select>
+            </label>
+            <label class="option-field due-option">
+              <span>Due date</span>
+              <input id="due-date-input" type="date" aria-label="Task due date" />
+            </label>
+            <label class="option-field reminder-option">
+              <span>Reminder</span>
+              <input id="reminder-time-input" type="time" aria-label="Reminder time" />
+            </label>
+          </div>
         </form>
+
+        <section class="progress-section" aria-label="Today's progress">
+          <div class="progress-copy">
+            <div>
+              <h2>Today's progress</h2>
+              <p id="progress-summary">Set due dates to plan your day.</p>
+            </div>
+            <span class="progress-count" id="progress-count">0 / 0</span>
+          </div>
+          <div class="progress-track" id="progress-track" role="progressbar" aria-label="Today's task completion" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0">
+            <span class="progress-fill" id="progress-fill"></span>
+          </div>
+        </section>
 
         <div class="list-heading">
           <div>
@@ -71,6 +125,23 @@
             <button class="filter-button" type="button" data-filter="active" aria-pressed="false">Active</button>
             <button class="filter-button" type="button" data-filter="completed" aria-pressed="false">Done</button>
           </div>
+        </div>
+
+        <div class="list-tools">
+          <label class="search-box">
+            <span class="sr-only">Search tasks</span>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.8" cy="8.8" r="5.8"></circle><path d="m13.2 13.2 4 4"></path></svg>
+            <input id="search-input" type="search" placeholder="Search your tasks…" autocomplete="off" />
+          </label>
+          <label class="category-filter">
+            <span class="sr-only">Filter by category</span>
+            <select id="category-filter">
+              <option value="all">All categories</option>
+              <option value="Personal">Personal</option>
+              <option value="Work">Work</option>
+              <option value="Study">Study</option>
+            </select>
+          </label>
         </div>
 
         <div class="notice" id="notice" role="alert" hidden></div>
@@ -92,7 +163,8 @@
         </footer>
       </section>
 
-      <p class="page-note">Your list stays in sync and ready whenever you are.</p>
+      <p class="page-note">Your list stays in sync and ready whenever you are. Reminders work while this app is open.</p>
     </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </body>
 </html>
