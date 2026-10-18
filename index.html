@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A simple, focused to-do list that keeps your tasks in sync with Firebase."
+    />
+    <meta name="theme-color" content="#f5f6f8" />
+    <title>Daymark — A calmer to-do list</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Daymark home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="m6.5 12.5 3.5 3.5 7.5-8" />
+              <path d="M20 12a8 8 0 1 1-2.34-5.66" />
+            </svg>
+          </span>
+          <span>daymark</span>
+        </a>
+        <div class="sync-status" id="sync-status" role="status" aria-live="polite">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="sync-status-text">Connecting to Firebase…</span>
+        </div>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow" id="today-label">YOUR DAY, YOUR PACE</p>
+        <h1 id="page-title">Make room for<br /><span>what matters.</span></h1>
+        <p class="intro-copy">A little focus goes a long way. What would you like to get done?</p>
+      </section>
+
+      <section class="task-panel" aria-label="Your tasks">
+        <form class="task-form" id="task-form">
+          <label class="sr-only" for="task-input">Add a task</label>
+          <span class="input-plus" aria-hidden="true">+</span>
+          <input
+            id="task-input"
+            name="task"
+            type="text"
+            placeholder="Add a task to your list…"
+            maxlength="180"
+            autocomplete="off"
+            required
+          />
+          <button class="add-button" type="submit">
+            <span>Add task</span>
+            <span aria-hidden="true">↵</span>
+          </button>
+        </form>
+
+        <div class="list-heading">
+          <div>
+            <h2>Your tasks <span class="task-count" id="task-count">0</span></h2>
+            <p id="task-summary">A fresh start, one task at a time.</p>
+          </div>
+          <div class="filters" role="group" aria-label="Filter tasks">
+            <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+            <button class="filter-button" type="button" data-filter="active" aria-pressed="false">Active</button>
+            <button class="filter-button" type="button" data-filter="completed" aria-pressed="false">Done</button>
+          </div>
+        </div>
+
+        <div class="notice" id="notice" role="alert" hidden></div>
+        <ul class="task-list" id="task-list" aria-live="polite" aria-relevant="additions removals text"></ul>
+        <div class="empty-state" id="empty-state">
+          <span class="empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <rect x="11" y="9" width="26" height="31" rx="5" />
+              <path d="M18 9V7h12v2M18 20h12M18 27h8" />
+              <path d="m28 33 3 3 6-7" />
+            </svg>
+          </span>
+          <h3 id="empty-title">Nothing on the list yet</h3>
+          <p id="empty-copy">Add a task above and give your day a little direction.</p>
+        </div>
+        <footer class="list-footer">
+          <span id="remaining-count">0 tasks left</span>
+          <span>Small steps count.</span>
+        </footer>
+      </section>
+
+      <p class="page-note">Your list stays in sync and ready whenever you are.</p>
+    </main>
+  </body>
+</html>
