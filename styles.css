@@ -942,6 +942,14 @@ html[data-theme="dark"] .empty-state h3 {
   color: #eef0f7;
 }
 
+html[data-theme="dark"] h1 {
+  color: #f1f2f8;
+}
+
+html[data-theme="dark"] h1 span {
+  color: #9aa6ff;
+}
+
 html[data-theme="dark"] .task-panel,
 html[data-theme="dark"] .utility-button,
 html[data-theme="dark"] .search-box,
